@@ -27,7 +27,12 @@ public class Robot extends TimedRobot {
 
   public final RobotContainer m_robotContainer;
 
-  DriveSubsystem DriveSub = new DriveSubsystem();
+  private final DriveSubsystem DriveSub = new DriveSubsystem();
+
+  @Override
+  public void robotInit() {
+    DriveSub.initializeMotors();
+  }
 
 
 
@@ -97,12 +102,54 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     double speed = -MathUtil.applyDeadband(DriveSub.m_driverController.getLeftY(), 0.2); 
     double speed1 = -MathUtil.applyDeadband(DriveSub.m_driverController.getRightX(), 0.2); 
-    speed1 =  DriveSub.m_speedLimiter1.calculate(speed1);
+    double speed2 = -MathUtil.applyDeadband(DriveSub.m_driverController.getLeftY(), 0.2); 
+    double speed3 = -MathUtil.applyDeadband(DriveSub.m_driverController.getRightX(), 0.2); 
+    double speed4 = -MathUtil.applyDeadband(DriveSub.m_driverController.getLeftY(), 0.2); 
+    double speed5 = -MathUtil.applyDeadband(DriveSub.m_driverController.getRightX(), 0.2); 
+    double speed6 = -MathUtil.applyDeadband(DriveSub.m_driverController.getLeftY(), 0.2); 
+    double speed7 = -MathUtil.applyDeadband(DriveSub.m_driverController.getRightX(), 0.2); 
+//Sets the joystick input coordinate (X or Y) proportinal to the deadband and stores it in a variable called "speedx"
+
+     speed1 =  DriveSub.m_speedLimiter1.calculate(speed1);
      speed = DriveSub.m_speedLimiter.calculate(speed);
-     DriveSub.m_getRightDrive.setControl(new DutyCycleOut(speed1));
-     DriveSub.m_getLeftDrive.setControl(new DutyCycleOut(speed));
-     speed = Math.min(speed, 0.1);
-     speed1 = Math.min(speed1, 0.1);
+     
+     speed3 =  DriveSub.m_speedLimiter3.calculate(speed3);
+     speed2 = DriveSub.m_speedLimiter2.calculate(speed2);
+    
+     speed5 =  DriveSub.m_speedLimiter5.calculate(speed5);
+     speed4 = DriveSub.m_speedLimiter4.calculate(speed4);
+     
+     speed7 =  DriveSub.m_speedLimiter7.calculate(speed7);
+     speed6 = DriveSub.m_speedLimiter6.calculate(speed6);
+  //Calculated the speed number and changes the value of the original variable
+
+// Top Right Swerve Drive Speed Values
+     DriveSub.top_rightX44.setControl(new DutyCycleOut(speed1));
+     DriveSub.top_rightX60.setControl(new DutyCycleOut(speed));
+
+// Top Left Swerve Drive Speed Values
+     DriveSub.top_leftX44.setControl(new DutyCycleOut(speed3));
+     DriveSub.top_leftX60.setControl(new DutyCycleOut(speed2));
+
+// Bottom Right Swerve Drive Speed Values
+     DriveSub.bottom_rightX44.setControl(new DutyCycleOut(speed5));
+     DriveSub.bottom_rightX60.setControl(new DutyCycleOut(speed4));
+
+// Bottom Left Swerve Drive Speed Values
+     DriveSub.bottom_leftX44.setControl(new DutyCycleOut(speed7));
+     DriveSub.bottom_leftX60.setControl(new DutyCycleOut(speed6));
+
+     // Gets the current position of the motor at any given moment and stores it in a variable
+     double bottomLX44currentPos = DriveSub.bottom_leftX44.getPosition().getValueAsDouble();
+     double bottomRX44currentPos = DriveSub.bottom_rightX44.getPosition().getValueAsDouble();
+     double topLX44currentPos = DriveSub.top_leftX44.getPosition().getValueAsDouble();
+     double topRX44currentPos = DriveSub.top_rightX44.getPosition().getValueAsDouble();
+
+     double topLX44Delta_r = topLX44currentPos - DriveSub.topLX44InitPos;
+     double topRX44Delta_r = topRX44currentPos - DriveSub.topRX44InitPos;
+     double bottomLX44Delta_r = bottomLX44currentPos - DriveSub.bottomLX44InitPos;
+     double bottomRX44Delta_r = bottomRX44currentPos - DriveSub.bottomRX44InitPos;
+
   }
    
     

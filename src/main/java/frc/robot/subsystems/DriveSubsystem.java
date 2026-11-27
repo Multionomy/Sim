@@ -16,19 +16,55 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;;
 
 public class DriveSubsystem extends SubsystemBase {
   
-  public final TalonFX m_getLeftDrive = new TalonFX(0);
-  public final TalonFX m_getRightDrive = new TalonFX(1);
+  // Top Right Swerve Motors
+  public final TalonFX top_rightX60 = new TalonFX(3);
+  public final TalonFX top_rightX44 = new TalonFX(1);
+
+  // Top Left Swerve Motors
+  public final TalonFX top_leftX60 = new TalonFX(0);
+  public final TalonFX top_leftX44 = new TalonFX(4);
+
+  // Bottom Right Swerve Motors
+  public final TalonFX bottom_rightX60 = new TalonFX(6);
+  public final TalonFX bottom_rightX44 = new TalonFX(7);
+
+  //Bottom Left Swerve Motors
+  public final TalonFX bottom_leftX60 = new TalonFX(5);
+  public final TalonFX bottom_leftX44 = new TalonFX(2);
+
 
 
   public final CommandXboxController m_driverController = new CommandXboxController(0);
   public final SlewRateLimiter m_speedLimiter = new SlewRateLimiter(0.25);
   public final SlewRateLimiter m_speedLimiter1 = new SlewRateLimiter(0.25);
+  public final SlewRateLimiter m_speedLimiter2 = new SlewRateLimiter(0.25);
+  public final SlewRateLimiter m_speedLimiter3 = new SlewRateLimiter(0.25);
+  public final SlewRateLimiter m_speedLimiter4 = new SlewRateLimiter(0.25);
+  public final SlewRateLimiter m_speedLimiter5 = new SlewRateLimiter(0.25);
+  public final SlewRateLimiter m_speedLimiter6 = new SlewRateLimiter(0.25);
+  public final SlewRateLimiter m_speedLimiter7 = new SlewRateLimiter(0.25);
+
+  // Gets the inital rotation of the X44's and stores them in a variable
+    public double bottomLX44InitPos;
+    public double bottomRX44InitPos;
+    public double topLX44InitPos;
+    public double topRX44InitPos;
 
 
-    public void robotIn() {
+    public void initializeMotors() {
       
 
-    m_getLeftDrive.getConfigurator().apply(new TalonFXConfiguration());
+    top_rightX60.getConfigurator().apply(new TalonFXConfiguration());
+    top_rightX44.getConfigurator().apply(new TalonFXConfiguration());
+    
+    top_leftX60.getConfigurator().apply(new TalonFXConfiguration());
+    top_leftX44.getConfigurator().apply(new TalonFXConfiguration());
+
+    bottom_rightX60.getConfigurator().apply(new TalonFXConfiguration());
+    bottom_rightX44.getConfigurator().apply(new TalonFXConfiguration());
+
+    bottom_leftX60.getConfigurator().apply(new TalonFXConfiguration());
+    bottom_leftX44.getConfigurator().apply(new TalonFXConfiguration());
     // Motor gets reset to factory config
 
     // Motor current configs
@@ -36,16 +72,30 @@ public class DriveSubsystem extends SubsystemBase {
     currentConfiguration.StatorCurrentLimit = 80;
     currentConfiguration.StatorCurrentLimitEnable = true;
 
-    // Refreshes and applies new current configs
-    m_getLeftDrive.getConfigurator().refresh(currentConfiguration);
-    m_getLeftDrive.getConfigurator().apply(currentConfiguration);
+    // applies new current configs to all motors
+    top_rightX60.getConfigurator().apply(currentConfiguration);
+    top_rightX44.getConfigurator().apply(currentConfiguration);
 
-    // For the other motor on the same drive (X60)
+    top_leftX60.getConfigurator().apply(currentConfiguration);
+    top_leftX44.getConfigurator().apply(currentConfiguration);
 
-    m_getRightDrive.getConfigurator().apply(new TalonFXConfiguration());
-    
-    currentConfiguration.StatorCurrentLimit = 80;
-    currentConfiguration.StatorCurrentLimitEnable = true;
+    bottom_rightX60.getConfigurator().apply(currentConfiguration);
+    bottom_rightX44.getConfigurator().apply(currentConfiguration);
+
+    bottom_leftX60.getConfigurator().apply(currentConfiguration);
+    bottom_leftX44.getConfigurator().apply(currentConfiguration);
+
+    // defines the values from the doubles aboce this method into this method
+    bottomLX44InitPos = bottom_leftX44.getPosition().getValueAsDouble();
+    bottomRX44InitPos = bottom_rightX44.getPosition().getValueAsDouble();
+    topLX44InitPos = top_leftX44.getPosition().getValueAsDouble();
+    topRX44InitPos = top_rightX44.getPosition().getValueAsDouble();
+
+    System.out.println("Bottom Left " + bottomLX44InitPos);
+    System.out.println("Bottom Right " + bottomRX44InitPos);
+    System.out.println("Top Right " + topRX44InitPos);
+    System.out.println("Top Left " + topLX44InitPos);
+
 
   }
 
